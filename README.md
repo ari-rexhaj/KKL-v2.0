@@ -3,7 +3,7 @@
 
 made with rust
 
-TODO:
+*TODO*:
 make kkl
 swapping
 groups
