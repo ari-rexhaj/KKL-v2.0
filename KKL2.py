@@ -9,8 +9,9 @@ customtkinter.set_default_color_theme("green")  # Themes: "blue" (standard), "gr
 ctk = customtkinter
 root = ctk.CTk()
 root.resizable(False,False)
-root.geometry("1200x800")
-SideEntryValue = 6
+root.geometry("1500x800")
+SideEntryValue = 8
+SideEntryValue_Max = 10
 
 ButtonWidth = 100
 ButtonHeight = 75
@@ -22,7 +23,7 @@ NameMode = 0
 #   Periodic Table = 2
 
 InputFrame = ctk.CTkFrame(root,width=200,corner_radius=0)
-ButtonFrame = ctk.CTkScrollableFrame(root,label_text='Class map (good luck >:)',width=800,corner_radius=0)
+ButtonFrame = ctk.CTkScrollableFrame(root,label_text='Class map (good luck >:)',width=1100,corner_radius=0)
 
 def ReadFile(string):
     with open(string+'.txt') as f:
