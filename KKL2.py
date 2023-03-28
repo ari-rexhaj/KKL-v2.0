@@ -12,22 +12,17 @@ root.resizable(False,False)
 root.geometry("1200x800")
 SideEntryValue = 6
 
-#Neon theme
-#EntryColor = '#1F1D36'
-#TableColor = '#864879'
-#InputColor = '#3F3351'
-#FrameColor = '#1F1D36'
-
 ButtonWidth = 100
 ButtonHeight = 75
-NameMode = 2
+
+NameMode = 0
 #|  Name modes:
 #   Full name    = 0
 #   First letter  = 1
 #   Periodic Table = 2
 
-ButtonFrame = ctk.CTkScrollableFrame(root,label_text='Class map (good luck >:)',width=800,corner_radius=0)
 InputFrame = ctk.CTkFrame(root,width=200,corner_radius=0)
+ButtonFrame = ctk.CTkScrollableFrame(root,label_text='Class map (good luck >:)',width=800,corner_radius=0)
 
 def ReadFile(string):
     with open(string+'.txt') as f:
@@ -37,11 +32,9 @@ def Genlist():  #is perfect
     ClassList = []
     file = 'eksempel'         #TEMPORARY
     EleverName = ReadFile(file)
-    print(EleverName)
     for i in range(0,len(EleverName)):
         ClassList.append(EleverName[i-1].replace("\n",""))
     random.shuffle(ClassList)
-    print(ClassList)
     return ClassList
 
 
@@ -74,10 +67,13 @@ Map = Genlist()
 Genmap(Map)
     
 
-
 Entry.pack(side='right',fill="y")
 InputFrame.pack(side='right',fill="y")
+ctk.CTkLabel(InputFrame,text="",width=200).pack(side=BOTTOM)
+ctk.CTkLabel(InputFrame,text="Inputs").pack(side='top')
 ButtonFrame.pack(side="left",fill="y")
+
+print(InputFrame.winfo_children()[0].cget('text'))
 
 Entry.configure(height=root.winfo_height())
 root.mainloop()
