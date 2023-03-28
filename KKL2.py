@@ -69,7 +69,7 @@ Genmap(Map)
 
 Entry.pack(side='right',fill="y")
 InputFrame.pack(side='right',fill="y")
-ctk.CTkLabel(InputFrame,text="",width=200).pack(side=BOTTOM)
+ctk.CTkLabel(InputFrame,text="",width=200).pack(side=BOTTOM)        #For stretching the inputframe to 200 pixels
 ctk.CTkLabel(InputFrame,text="Inputs").pack(side='top')
 ButtonFrame.pack(side="left",fill="y")
 
