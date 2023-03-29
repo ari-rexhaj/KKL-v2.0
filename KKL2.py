@@ -10,8 +10,9 @@ ctk = customtkinter
 root = ctk.CTk()
 root.resizable(False,False)
 root.geometry("1500x800")
-SideEntryValue = 8
+SideEntryValue = 6
 SideEntryValue_Max = 10
+Map = []
 
 ButtonWidth = 100
 ButtonHeight = 75
@@ -24,6 +25,8 @@ NameMode = 0
 
 InputFrame = ctk.CTkFrame(root,width=200,corner_radius=0)
 ButtonFrame = ctk.CTkScrollableFrame(root,label_text='Class map (good luck >:)',width=1100,corner_radius=0)
+Entry = ctk.CTkTextbox(root,width=200,height=root.winfo_height(),corner_radius=0)
+
 
 def ReadFile(string):
     with open(string+'.txt') as f:
@@ -56,22 +59,37 @@ def Genmap(list):
         globals()[f"Person_{i}"].grid(column=x,row=y,padx=2,pady=2)
         x += 1
         if x%(SideEntryValue) == 0:
-            y += 1
             x = 0
+            y += 1
             
 
-EleverName = ReadFile('eksempel')
-Entry = ctk.CTkTextbox(root,width=200,height=root.winfo_height(),corner_radius=0)
-for Name in EleverName:
-    Entry.insert(INSERT, Name)
+def WriteToTextbox(bool):
+    EleverName = ReadFile('eksempel')
+    if bool is True:
+        #Clear the textbox
+        print("help!")
+    for Name in EleverName:
+        Entry.insert(INSERT, Name)
+
+def Newmap():
+    WriteToTextbox(True)
+    global Map
+    Map = Genlist()
+    Genmap(Map)
+
+
+WriteToTextbox(True)
 Map = Genlist()
 Genmap(Map)
-    
+
+
+
 
 Entry.pack(side='right',fill="y")
 InputFrame.pack(side='right',fill="y")
 ctk.CTkLabel(InputFrame,text="",width=200).pack(side=BOTTOM)        #For stretching the inputframe to 200 pixels
 ctk.CTkLabel(InputFrame,text="Inputs").pack(side='top')
+ctk.CTkButton(InputFrame,text="Generate\nnew map",width=150,height=100,command=Newmap).pack()
 ButtonFrame.pack(side="left",fill="y")
 
 print(InputFrame.winfo_children()[0].cget('text'))
