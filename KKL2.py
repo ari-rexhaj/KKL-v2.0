@@ -13,23 +13,28 @@ ctk = customtkinter
 root = ctk.CTk()
 root.resizable(False,False)
 root.geometry("1500x800")
+
 SideEntryValue = 6
 SideEntryValue_Max = 10
-Map = []
 
-ButtonWidth = 100
-ButtonHeight = 75
+Themes = ['Full name','First letters','Periodic table']
+NameMode = StringVar()
+NameMode.set(Themes[0])
 
-NameMode = 2
-#|  Name modes:
-#   Full name    = 0
-#   First letter  = 1
-#   Periodic Table = 2
+ButtonAmplifier = 1.5
+ButtonWidth = 100*ButtonAmplifier
+ButtonHeight = 75*ButtonAmplifier
 
 InputFrame = ctk.CTkFrame(root,width=200,corner_radius=0)
 ButtonFrame = ctk.CTkScrollableFrame(root,label_text=('Class map\n'+TrademarkText),width=1100,corner_radius=0)
 Entry = ctk.CTkTextbox(root,width=200,height=root.winfo_height(),corner_radius=0)
 Entry.configure(state=NORMAL)
+
+def EventThemeChanged(theme):
+    global Map
+    Genmap(Map)
+
+OptionsMenu = ctk.CTkOptionMenu(InputFrame,values=Themes,variable=NameMode,command=EventThemeChanged)
 
 def ReadFile(string):
     with open(string+'.txt') as f:
@@ -58,12 +63,12 @@ def Genlist():  #is perfect
 def Genmap(list):
     ButtonFrame.config(width=(10*(2+ButtonWidth) * len(list)))
     for i in range(0,len(list)):
-        match NameMode:
-            case 0:
+        match NameMode.get():
+            case 'Full name':
                 Name = list[i]
-            case 1:
+            case 'First letters':
                 Name = list[i][0]
-            case 2:
+            case 'Periodic table':
                 if len(list[i]) >= 2:
                     Name = list[i][0] + list[i][1]  #Reads only the 2 first letters
                 else:
@@ -110,6 +115,8 @@ InputFrame.pack(side='right',fill="y")
 ctk.CTkLabel(InputFrame,text="",width=200).pack(side=BOTTOM)        #For stretching the inputframe to 200 pixels
 ctk.CTkLabel(InputFrame,text="Inputs").pack(side='top')
 ctk.CTkButton(InputFrame,text="Generate\nnew map",width=150,height=100,command=Newmap).pack()
+OptionsMenu.pack(side=BOTTOM)
+ctk.CTkLabel(InputFrame,text='Themes').pack(side=BOTTOM)
 ButtonFrame.pack(side="left",fill="y")
 Entry.configure(height=root.winfo_height())
 root.mainloop()
