@@ -1,6 +1,8 @@
 from tkinter import *
 import customtkinter
 import random
+import numpy as np
+from numpy import array
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("green")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -14,7 +16,7 @@ root = ctk.CTk()
 root.resizable(False,False)
 root.geometry("1500x800")
 
-SideEntryValue = 6
+SideEntryValue = 5
 SideEntryValue_Max = 10
 
 Themes = ['Full name','First letters','Periodic table']
@@ -29,16 +31,29 @@ InputFrame = ctk.CTkFrame(root,width=200,corner_radius=0)
 ButtonFrame = ctk.CTkScrollableFrame(root,label_text=('Class map\n'+TrademarkText),width=1100,corner_radius=0)
 Entry = ctk.CTkTextbox(root,width=200,height=root.winfo_height(),corner_radius=0)
 Entry.configure(state=NORMAL)
+SliderInfo = ctk.CTkFrame(InputFrame)
+SliderCanvas = Canvas(SliderInfo,width=200,height=100)
+
+Live = False
+def EventSliderChanged(float):
+    global SideEntryValue
+    if float < 0.1:
+        float = 0.1
+    SideEntryValue = round(float*SideEntryValue_Max)
+    print(SideEntryValue)
 
 def EventThemeChanged(theme):
     global Map
     Genmap(Map)
-
-OptionsMenu = ctk.CTkOptionMenu(InputFrame,values=Themes,variable=NameMode,command=EventThemeChanged)
+    root.update()
 
 def ReadFile(string):
     with open(string+'.txt') as f:
         return f.readlines()
+
+OptionsMenu = ctk.CTkOptionMenu(InputFrame,values=Themes,variable=NameMode,command=EventThemeChanged)
+Slider = ctk.CTkSlider(SliderInfo,width=170,command=EventSliderChanged)
+EleverAmount = len(ReadFile('eksempel'))    #TEMPORARY
     
 def WriteFile(text=None):   #Done to save map and stuff
     if text == None:
@@ -46,7 +61,6 @@ def WriteFile(text=None):   #Done to save map and stuff
     else:
         print("IDK HOW TO WRITE TO FILE",text)
 
-EleverAmount = len(ReadFile('eksempel'))    #TEMPORARY
 
 def Genlist():  #is perfect
     global EleverAmount
@@ -56,11 +70,18 @@ def Genlist():  #is perfect
     for i in range(0,len(EleverName)):
         ClassList.append(EleverName[i-1].replace("\n",""))
     random.shuffle(ClassList)
-    EleverAmount = len(ClassList)
     return ClassList
 
+CheckEntry = SideEntryValue
 
 def Genmap(list):
+    global CheckEntry
+    global SideEntryValue
+    global EleverAmount
+    if SideEntryValue != CheckEntry:
+        Genbuttons(EleverAmount)
+    CheckEntry = SideEntryValue
+
     ButtonFrame.config(width=(10*(2+ButtonWidth) * len(list)))
     for i in range(0,len(list)):
         match NameMode.get():
@@ -74,8 +95,12 @@ def Genmap(list):
                 else:
                     Name = list[i][0]
         globals()[f"Person_{i}"].configure(text=Name)
+
             
 def Genbuttons(Amount):
+    for widget in ButtonFrame.winfo_children():
+        widget.destroy()
+
     x = 0
     y = 0
     for i in range(0,Amount):
@@ -115,6 +140,10 @@ InputFrame.pack(side='right',fill="y")
 ctk.CTkLabel(InputFrame,text="",width=200).pack(side=BOTTOM)        #For stretching the inputframe to 200 pixels
 ctk.CTkLabel(InputFrame,text="Inputs").pack(side='top')
 ctk.CTkButton(InputFrame,text="Generate\nnew map",width=150,height=100,command=Newmap).pack()
+SliderInfo.pack(pady=30)
+ctk.CTkLabel(SliderInfo,text='Map x value').pack()
+Slider.pack()
+SliderCanvas.pack()
 OptionsMenu.pack(side=BOTTOM)
 ctk.CTkLabel(InputFrame,text='Themes').pack(side=BOTTOM)
 ButtonFrame.pack(side="left",fill="y")
